@@ -1,0 +1,4 @@
+src/shared
+node_modules/
+lib/target/
+dist
