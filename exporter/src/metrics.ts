@@ -47,3 +47,19 @@ export const validatorCommissionMetric = new Prometheus.Gauge({
   help: 'Validator commission',
   labelNames: ['chain_id', 'validator_tm_address', 'validator_hash_address'],
 })
+export const validatorMaxSetSizeMetric = new Prometheus.Gauge({
+  name: 'network_max_set_size',
+  help: 'Max set size',
+  labelNames: ['chain_id'],
+})
+
+export const validatorStakeThresholdMetric = new Prometheus.Gauge({
+  name: 'network_stake_threshold',
+  help: 'Stake threshold',
+  labelNames: ['chain_id'],
+})
+export const validatorActiveSetSizeMetric = new Prometheus.Gauge({
+  name: 'network_active_set_size',
+  help: 'Active set size',
+  labelNames: ['chain_id'],
+})

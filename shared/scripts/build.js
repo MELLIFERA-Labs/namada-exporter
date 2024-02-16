@@ -83,12 +83,15 @@ try {
 
     // Regular expression to match the require statements using String.raw
     const regex = /require\(String.raw`(.+?)`\)/g;
-
+    const wasmBuffer = fs.readFileSync(path.join(outDir, 'shared_bg.wasm'));
+    const base64String = wasmBuffer.toString('base64');
     // Replace found instances with standard require statements
     const modifiedData = data.replace(regex, "require('$1')");
+    const modifiedData2 = modifiedData.replace(/const bytes = require\('fs'\)\.readFileSync\(path\);/g,`const bytes = Buffer.from("${base64String}", 'base64');`);
+
 
     // Write the modified content back to the file or a new file synchronously
-    fs.writeFileSync(filePath, modifiedData, 'utf8');
+    fs.writeFileSync(filePath, modifiedData2, 'utf8');
 
     console.log('The file has been saved with String.raw removed!');
 } catch (err) {
@@ -101,4 +104,5 @@ try {
 // execSync(`rm -rf ${outDir}.gitignore`);
 
 // Manually copy wasms to dist
+
 execSync(`cp -r ${outDir}/*.wasm ${__dirname}/../dist/shared`);
