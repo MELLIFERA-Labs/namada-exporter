@@ -18,6 +18,7 @@ import {
   validatorMaxSetSizeMetric,
   validatorStakeThresholdMetric,
   validatorActiveSetSizeMetric,
+  validatorLatestBlockMetric,
 } from './metrics.ts'
 import Prometheus from 'prom-client'
 program
@@ -33,6 +34,7 @@ enum ValidatorState {
   JAILED,
   INACTIVE,
 }
+
 function mapValidatorState(state: string): ValidatorState {
   switch (state) {
     case 'active_consensus_set':
@@ -60,6 +62,9 @@ async function collectMetrics(config: {
   const chainId = status['result']['node_info']['network']
   const catchUp = status['result']['sync_info']['catching_up']
   const nodeValAddress = status['result']['validator_info']['address']
+  const validatorLatestBlock =
+    status['result']['sync_info']['latest_block_height']
+
   if (catchUp) {
     console.warn('WARNING: Node is catching up may not provide accurate data')
   }
@@ -72,6 +77,7 @@ async function collectMetrics(config: {
     q.query_consensus_validator_set(),
     q.query_pos_params(),
   ])
+
   const sortedValidators = validators.sort(
     (a: { stake: string }, b: { stake: string }) =>
       BigNumber(b.stake).comparedTo(a.stake),
@@ -94,6 +100,8 @@ async function collectMetrics(config: {
   validatorStakeThresholdMetric.set(
     Number(posParams.owned.validator_stake_threshold),
   )
+  validatorLatestBlockMetric.set(Number(validatorLatestBlock))
+
   validatorActiveSetSizeMetric.set(Number(validators.length))
   /** set default value if validator is not in active set */
   activeSetRankMetric.set(
