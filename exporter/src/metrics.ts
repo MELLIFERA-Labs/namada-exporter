@@ -64,7 +64,7 @@ export const validatorActiveSetSizeMetric = new Prometheus.Gauge({
   labelNames: ['chain_id'],
 })
 export const validatorLatestBlockMetric = new Prometheus.Gauge({
-  name: 'network_latest_block',
+  name: 'validator_node_latest_block',
   help: 'Latest block from rpc',
   labelNames: ['chain_id'],
 })
