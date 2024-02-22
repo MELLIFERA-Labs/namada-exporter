@@ -51,12 +51,20 @@ function mapValidatorState(state: string): ValidatorState {
       return ValidatorState.UNKNOWN
   }
 }
-
 async function collectMetrics(config: {
   validator_http_rpc: string
   validator_tm_address: string
   port: number
 }) {
+  const defaultValidatorData = {
+    address: config['validator_tm_address'],
+    address_hash: '',
+    commission: {
+      commission_rate: '0',
+    },
+    stake: '-1',
+    state: 'unknown',
+  }
   const statusUrl = `${config['validator_http_rpc']}/status`
   const status = await fetch(statusUrl).then((data) => data.json())
   const chainId = status['result']['node_info']['network']
@@ -73,7 +81,10 @@ async function collectMetrics(config: {
   /** request data */
   const [epoch, validator, validators, posParams] = await Promise.all([
     q.query_epoch(),
-    q.query_validator_data(config['validator_tm_address']),
+    q.query_validator_data(config['validator_tm_address']).catch((e) => {
+      console.error('Failed to get validator data', e)
+      return defaultValidatorData
+    }),
     q.query_consensus_validator_set(),
     q.query_pos_params(),
   ])
@@ -92,7 +103,7 @@ async function collectMetrics(config: {
   }
   if (validator.address_hash !== nodeValAddress) {
     console.warn(
-      'WARNING: Using not validator rpc, this exporter suppose to be run with validator rpc',
+      'WARNING: Supose using not validator rpc, this exporter suppose to be run with validator rpc that related to specified validator address',
     )
   }
   Prometheus.register.setDefaultLabels({ chain_id: chainId })
