@@ -51,19 +51,28 @@ function mapValidatorState(state: string): ValidatorState {
       return ValidatorState.UNKNOWN
   }
 }
+type ValidatorData = {
+  address: string
+  address_hash: string
+  commission: {
+    commission_rate: string
+  }
+  stake: string
+  state: ValidatorState
+}
 async function collectMetrics(config: {
   validator_http_rpc: string
   validator_tm_address: string
   port: number
 }) {
-  const defaultValidatorData = {
+  const defaultValidatorData: ValidatorData = {
     address: config['validator_tm_address'],
     address_hash: '',
     commission: {
       commission_rate: '0',
     },
     stake: '-1',
-    state: 'unknown',
+    state: ValidatorState.UNKNOWN,
   }
   const statusUrl = `${config['validator_http_rpc']}/status`
   const status = await fetch(statusUrl).then((data) => data.json())
