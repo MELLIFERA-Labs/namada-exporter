@@ -58,7 +58,8 @@ type ValidatorData = {
     commission_rate: string
   }
   stake: string
-  state: ValidatorState
+  state: string
+  missed_blocks: string
 }
 async function collectMetrics(config: {
   validator_http_rpc: string
@@ -72,7 +73,8 @@ async function collectMetrics(config: {
       commission_rate: '0',
     },
     stake: '-1',
-    state: ValidatorState.UNKNOWN,
+    state: 'unknown',
+    missed_blocks: '0',
   }
   const statusUrl = `${config['validator_http_rpc']}/status`
   const status = await fetch(statusUrl).then((data) => data.json())
@@ -93,7 +95,7 @@ async function collectMetrics(config: {
     q.query_validator_data(config['validator_tm_address']).catch((e) => {
       console.error('Failed to get validator data', e)
       return defaultValidatorData
-    }),
+    }) as Promise<ValidatorData>,
     q.query_consensus_validator_set(),
     q.query_pos_params(),
   ])
@@ -120,7 +122,12 @@ async function collectMetrics(config: {
   validatorStakeThresholdMetric.set(
     Number(posParams.owned.validator_stake_threshold),
   )
-  validatorLatestBlockMetric.set(Number(validatorLatestBlock))
+  validatorLatestBlockMetric.set(
+    {
+      ...valAddressMetrics,
+    },
+    Number(validatorLatestBlock),
+  )
 
   validatorActiveSetSizeMetric.set(Number(validators.length))
   /** set default value if validator is not in active set */
