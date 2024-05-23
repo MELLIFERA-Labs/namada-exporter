@@ -38,7 +38,6 @@ Look at [config.example.toml](config.example.toml) for more details
 ```bash
 ./namada-exporter start --config config.toml
 ```
-# TODO: delete address from metrics example
 ### Metrics expose example
 ```
 # HELP validator_uptime_percentage Validator uptime in percentage; -1 value if validator not in active set
