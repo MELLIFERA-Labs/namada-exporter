@@ -1,4 +1,5 @@
 use js_sys::JSON::stringify;
+use namada_sdk::storage::BlockHeight;
 use std::fmt::Debug;
 use std::fmt::Display;
 use thiserror::Error;
@@ -7,12 +8,11 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::Response;
 
-use namada::ledger::queries::{Client, EncodedResponseQuery};
-use namada::tendermint::{self, abci::Code};
-use namada::tendermint_rpc::{
+use namada_sdk::queries::{Client, EncodedResponseQuery};
+use namada_sdk::tendermint::{self, abci::Code};
+use namada_sdk::tendermint_rpc::{
     error::Error as TendermintRpcError, Response as RpcResponse, SimpleRequest,
 };
-use namada::types::storage::BlockHeight;
 
 #[wasm_bindgen(module = "/src/rpc_client.js")]
 extern "C" {
@@ -41,14 +41,14 @@ impl From<std::io::Error> for RpcError {
     }
 }
 
-impl From<namada::tendermint::Error> for RpcError {
-    fn from(error: namada::tendermint::Error) -> Self {
+impl From<namada_sdk::tendermint::Error> for RpcError {
+    fn from(error: namada_sdk::tendermint::Error) -> Self {
         RpcError::new(&error.to_string())
     }
 }
 
-impl From<namada::tendermint_rpc::Error> for RpcError {
-    fn from(error: namada::tendermint_rpc::Error) -> Self {
+impl From<namada_sdk::tendermint_rpc::Error> for RpcError {
+    fn from(error: namada_sdk::tendermint_rpc::Error) -> Self {
         RpcError::new(&error.to_string())
     }
 }
@@ -119,6 +119,7 @@ impl Client for HttpClient {
                 data: response.value,
                 info: response.info,
                 proof: response.proof,
+                height: response.height.into(),
             }),
             Code::Err(code) => Err(RpcError::new(&format!("Error code {}", code))),
         }
@@ -134,6 +135,7 @@ impl Client for HttpClient {
         R: SimpleRequest,
     {
         let request_body = request.into_json();
+
         let response = self
             .fetch(&self.url[..], "POST", &request_body)
             .await

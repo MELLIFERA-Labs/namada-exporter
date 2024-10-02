@@ -1,0 +1,10 @@
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/liblog-38bd2b9103c443db.rmeta: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/macros.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/serde.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/__private_api.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/liblog-38bd2b9103c443db.rlib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/macros.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/serde.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/__private_api.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/log-38bd2b9103c443db.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/macros.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/serde.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/__private_api.rs
+
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/lib.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/macros.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/serde.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/log-0.4.21/src/__private_api.rs:

@@ -1,0 +1,10 @@
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libtap-d3a64def9edcfa52.rmeta: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/conv.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/pipe.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/tap.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libtap-d3a64def9edcfa52.rlib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/conv.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/pipe.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/tap.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/tap-d3a64def9edcfa52.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/conv.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/pipe.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/tap.rs
+
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/lib.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/conv.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/pipe.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tap-1.0.1/src/tap.rs:

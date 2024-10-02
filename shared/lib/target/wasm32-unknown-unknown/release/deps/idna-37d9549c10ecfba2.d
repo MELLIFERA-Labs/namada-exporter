@@ -1,0 +1,10 @@
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libidna-37d9549c10ecfba2.rmeta: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/punycode.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46_mapping_table.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libidna-37d9549c10ecfba2.rlib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/punycode.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46_mapping_table.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/idna-37d9549c10ecfba2.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/punycode.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46_mapping_table.rs
+
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/lib.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/punycode.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/idna-0.5.0/src/uts46_mapping_table.rs:

@@ -1,0 +1,9 @@
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libcargo_platform-69d754659c046e93.rmeta: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/cfg.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/error.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libcargo_platform-69d754659c046e93.rlib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/cfg.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/error.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/cargo_platform-69d754659c046e93.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/cfg.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/error.rs
+
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/lib.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/cfg.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-platform-0.1.8/src/error.rs:

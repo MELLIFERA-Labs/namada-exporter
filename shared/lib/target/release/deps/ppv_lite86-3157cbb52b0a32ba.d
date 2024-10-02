@@ -1,0 +1,10 @@
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/libppv_lite86-3157cbb52b0a32ba.rmeta: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/soft.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/types.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/generic.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/libppv_lite86-3157cbb52b0a32ba.rlib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/soft.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/types.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/generic.rs
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/ppv_lite86-3157cbb52b0a32ba.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/soft.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/types.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/generic.rs
+
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/lib.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/soft.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/types.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.17/src/generic.rs:

@@ -1,0 +1,9 @@
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libchacha20poly1305-29aef6a79c5957a2.rmeta: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/cipher.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/../README.md
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libchacha20poly1305-29aef6a79c5957a2.rlib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/cipher.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/../README.md
+
+/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/chacha20poly1305-29aef6a79c5957a2.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/cipher.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/../README.md
+
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/lib.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/cipher.rs:
+/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/chacha20poly1305-0.10.1/src/../README.md:

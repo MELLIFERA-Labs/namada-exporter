@@ -1,9 +1,15 @@
 const { parseArgs } = require("node:util");
 const { spawnSync, execSync } = require("child_process");
-const fs = require('fs');
-const path = require('path');
+const path = require("path");
+const fs = require("fs");
+
+const targets = ["web", "nodejs"];
 
 const argsOptions = {
+  target: {
+    type: "string",
+    short: "t",
+  },
   multicore: {
     type: "boolean",
     short: "m",
@@ -13,21 +19,27 @@ const argsOptions = {
     short: "r",
   },
 };
-const { multicore, release } = parseArgs({
+const {
+  multicore,
+  release,
+  target: maybeTarget,
+} = parseArgs({
   args: process.argv.slice(2),
   options: argsOptions,
 }).values;
 
 const mode = release ? "release" : "development";
 const multicoreLabel = multicore ? "on" : "off";
+const target = targets.includes(maybeTarget) ? maybeTarget : "web";
 
 execSync("rm -rf dist");
+execSync("rm -rf src/shared");
 
 console.log(
-  `Building \"shared\" in ${mode} mode. Multicore is ${multicoreLabel}.`
+  `Building \"shared\" in ${mode} mode for ${target} target. Multicore is ${multicoreLabel}.`
 );
 
-const features = [];
+const features = [target];
 let profile = "--release";
 
 if (multicore) {
@@ -48,11 +60,11 @@ const { status } = spawnSync(
     `${__dirname}/../lib`,
     profile,
     `--target`,
-    `nodejs`,
+    target,
     `--out-dir`,
     outDir,
     `--`,
-    features.length > 0 ? ["--features", features.join(",")].flat() : [],
+    ["--features", features.join(",")].flat(),
     multicore ? [`-Z`, `build-std=panic_abort,std`] : [],
   ].flat(),
   {
@@ -72,6 +84,9 @@ if (status !== 0) {
 
 execSync("rm -rf dist && mkdir dist && mkdir dist/shared");
 
+// Remove the .gitignore so we can publish generated files
+execSync(`rm -rf ${outDir}.gitignore`);
+
 /** 
 remove String.raw
 **/
@@ -84,7 +99,9 @@ try {
     // Regular expression to match the require statements using String.raw
     const regex = /require\(String.raw`(.+?)`\)/g;
     const wasmBuffer = fs.readFileSync(path.join(outDir, 'shared_bg.wasm'));
+   
     const base64String = wasmBuffer.toString('base64');
+
     // Replace found instances with standard require statements
     const modifiedData = data.replace(regex, "require('$1')");
     const modifiedData2 = modifiedData.replace(/const bytes = require\('fs'\)\.readFileSync\(path\);/g,`const bytes = Buffer.from("${base64String}", 'base64');`);
@@ -100,9 +117,5 @@ try {
     process.exit(1)
 }
 
-// Remove the .gitignore so we can publish generated files
-// execSync(`rm -rf ${outDir}.gitignore`);
-
 // Manually copy wasms to dist
-
 execSync(`cp -r ${outDir}/*.wasm ${__dirname}/../dist/shared`);

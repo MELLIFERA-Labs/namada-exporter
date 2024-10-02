@@ -1,479 +1,334 @@
-use std::{path::PathBuf, str::FromStr};
+use std::collections::HashMap;
+use std::str::FromStr;
 
-use borsh::{BorshDeserialize, BorshSerialize};
-use namada::core::ibc::core::host::types::identifiers::{ChannelId, PortId};
-use namada::tx::data::GasLimit;
-use namada::{
-    sdk::args::{self, InputAmount},
-    types::{
-        address::Address,
-        chain::ChainId,
-        ethereum_events::EthAddress,
-        key::common::PublicKey,
-        masp::{ExtendedSpendingKey, PaymentAddress, TransferSource, TransferTarget},
-        token::{Amount, DenominatedAmount, NATIVE_MAX_DECIMAL_PLACES},
-    },
+use gloo_utils::format::JsValueSerdeExt;
+use namada_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use namada_sdk::signing::SigningTxData;
+use namada_sdk::tx::data::compute_inner_tx_hash;
+use namada_sdk::tx::either::Either;
+use namada_sdk::tx::{
+    self, TX_BOND_WASM, TX_CLAIM_REWARDS_WASM, TX_REDELEGATE_WASM, TX_REVEAL_PK, TX_TRANSFER_WASM,
+    TX_UNBOND_WASM, TX_VOTE_PROPOSAL, TX_WITHDRAW_WASM,
 };
-use tendermint_config::net::Address as TendermintAddress;
-use wasm_bindgen::JsError;
+use namada_sdk::uint::Uint;
+use namada_sdk::{address::Address, key::common::PublicKey};
+use wasm_bindgen::{prelude::wasm_bindgen, JsError, JsValue};
 
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct TxMsg {
-    token: String,
-    fee_amount: String,
-    gas_limit: String,
-    chain_id: String,
-    public_key: Option<String>,
-    disposable_signing_key: Option<bool>,
-    fee_unshield: Option<String>,
+use super::args::WrapperTxMsg;
+use crate::sdk::transaction;
+use crate::types::query::WasmHash;
+
+#[wasm_bindgen]
+#[derive(BorshSerialize, BorshDeserialize, Copy, Clone, Debug)]
+#[borsh(crate = "namada_sdk::borsh", use_discriminant = true)]
+pub enum TxType {
+    Bond = 1,
+    Unbond = 2,
+    Withdraw = 3,
+    Transfer = 4,
+    IBCTransfer = 5,
+    EthBridgeTransfer = 6,
+    RevealPK = 7,
+    VoteProposal = 8,
+    Redelegate = 9,
+    Batch = 10,
+    ClaimRewards = 11,
 }
 
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitBondMsg {
-    source: String,
-    validator: String,
-    amount: String,
-    native_token: String,
+#[derive(BorshSerialize, BorshDeserialize, Clone, Debug)]
+#[borsh(crate = "namada_sdk::borsh")]
+pub struct SigningData {
+    owner: Option<String>,
+    public_keys: Vec<String>,
+    threshold: u8,
+    account_public_keys_map: Option<Vec<u8>>,
+    fee_payer: String,
 }
 
-/// Maps serialized tx_msg into BondTx args.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if the tx_msg can't be deserialized or
-/// Rust structs can't be created.
-pub fn bond_tx_args(bond_msg: &[u8], tx_msg: &[u8]) -> Result<args::Bond, JsError> {
-    let bond_msg = SubmitBondMsg::try_from_slice(bond_msg)?;
+impl SigningData {
+    // Create serializable struct from Namada type
+    pub fn from_signing_tx_data(signing_tx_data: SigningTxData) -> Result<SigningData, JsError> {
+        let owner: Option<String> = match signing_tx_data.owner {
+            Some(addr) => Some(addr.to_string()),
+            None => None,
+        };
+        let public_keys = signing_tx_data
+            .public_keys
+            .into_iter()
+            .map(|pk| pk.to_string())
+            .collect();
 
-    let SubmitBondMsg {
-        source,
-        validator,
-        native_token: _native_token,
-        amount,
-    } = bond_msg;
+        let account_public_keys_map = match signing_tx_data.account_public_keys_map {
+            Some(pk_map) => Some(borsh::to_vec(&pk_map)?),
+            None => None,
+        };
 
-    let source = Address::from_str(&source)?;
-    let validator = Address::from_str(&validator)?;
-    let amount = Amount::from_str(&amount, NATIVE_MAX_DECIMAL_PLACES)?;
-    let tx = tx_msg_into_args(tx_msg)?;
+        let fee_payer = signing_tx_data.fee_payer.to_string();
+        let threshold = signing_tx_data.threshold;
 
-    let args = args::Bond {
-        tx,
-        validator,
-        amount,
-        source: Some(source),
-        tx_code_path: PathBuf::from("tx_bond.wasm"),
-    };
+        Ok(SigningData {
+            owner,
+            public_keys,
+            threshold,
+            account_public_keys_map,
+            fee_payer,
+        })
+    }
 
-    Ok(args)
-}
+    // Create Namada type from this struct
+    pub fn to_signing_tx_data(&self) -> Result<SigningTxData, JsError> {
+        let owner: Option<Address> = match &self.owner {
+            Some(addr) => Some(Address::from_str(&addr)?),
+            None => None,
+        };
 
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitUnbondMsg {
-    source: String,
-    validator: String,
-    amount: String,
-}
-
-/// Maps serialized tx_msg into UnbondTx args.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if the tx_msg can't be deserialized or
-/// Rust structs can't be created.
-pub fn unbond_tx_args(unbond_msg: &[u8], tx_msg: &[u8]) -> Result<args::Unbond, JsError> {
-    let unbond_msg = SubmitUnbondMsg::try_from_slice(unbond_msg)?;
-
-    let SubmitUnbondMsg {
-        source,
-        validator,
-        amount,
-    } = unbond_msg;
-
-    let source = Address::from_str(&source)?;
-    let validator = Address::from_str(&validator)?;
-
-    let amount = Amount::from_str(&amount, NATIVE_MAX_DECIMAL_PLACES)?;
-    let tx = tx_msg_into_args(tx_msg)?;
-
-    let args = args::Unbond {
-        tx,
-        validator,
-        amount,
-        source: Some(source),
-        tx_code_path: PathBuf::from("tx_unbond.wasm"),
-    };
-
-    Ok(args)
-}
-
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitWithdrawMsg {
-    source: String,
-    validator: String,
-}
-
-/// Maps serialized tx_msg into WithdrawTx args.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if the tx_msg can't be deserialized or
-/// Rust structs can't be created.
-pub fn withdraw_tx_args(withdraw_msg: &[u8], tx_msg: &[u8]) -> Result<args::Withdraw, JsError> {
-    let withdraw_msg = SubmitWithdrawMsg::try_from_slice(withdraw_msg)?;
-
-    let SubmitWithdrawMsg { source, validator } = withdraw_msg;
-
-    let source = Address::from_str(&source)?;
-    let validator = Address::from_str(&validator)?;
-    let tx = tx_msg_into_args(tx_msg)?;
-
-    let args = args::Withdraw {
-        tx,
-        validator,
-        source: Some(source),
-        tx_code_path: PathBuf::from("tx_withdraw.wasm"),
-    };
-
-    Ok(args)
-}
-
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitVoteProposalMsg {
-    signer: String,
-    proposal_id: u64,
-    vote: String,
-}
-
-/// Maps serialized tx_msg into VoteProposalTx args.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if the tx_msg can't be deserialized or
-/// Rust structs can't be created.
-pub fn vote_proposal_tx_args(
-    vote_proposal_msg: &[u8],
-    tx_msg: &[u8],
-) -> Result<args::VoteProposal, JsError> {
-    let vote_proposal_msg = SubmitVoteProposalMsg::try_from_slice(vote_proposal_msg)?;
-
-    let SubmitVoteProposalMsg {
-        signer,
-        proposal_id,
-        vote,
-    } = vote_proposal_msg;
-    let tx = tx_msg_into_args(tx_msg)?;
-    let voter = Address::from_str(&signer)?;
-
-    let args = args::VoteProposal {
-        tx,
-        proposal_id: Some(proposal_id),
-        is_offline: false,
-        vote,
-        voter,
-        proposal_data: None,
-        tx_code_path: PathBuf::from("tx_vote_proposal.wasm"),
-    };
-
-    Ok(args)
-}
-
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitTransferMsg {
-    source: String,
-    target: String,
-    token: String,
-    amount: String,
-    native_token: String,
-}
-
-/// Maps serialized tx_msg into TransferTx args.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if the tx_msg can't be deserialized or
-/// Rust structs can't be created.
-pub fn transfer_tx_args(
-    transfer_msg: &[u8],
-    tx_msg: &[u8],
-    xsk: Option<String>,
-) -> Result<args::TxTransfer, JsError> {
-    let transfer_msg = SubmitTransferMsg::try_from_slice(transfer_msg)?;
-    let SubmitTransferMsg {
-        source,
-        target,
-        token,
-        amount,
-        native_token: _native_token,
-    } = transfer_msg;
-
-    let source = match Address::from_str(&source) {
-        Ok(v) => Ok(TransferSource::Address(v)),
-        Err(e1) => match ExtendedSpendingKey::from_str(
-            &xsk.expect("Extended spending key to be present, if address type is shielded."),
-        ) {
-            Ok(v) => Ok(TransferSource::ExtendedSpendingKey(v)),
-            Err(e2) => Err(JsError::new(&format!(
-                "Can't compute the transfer source. {}, {}",
-                e1, e2
-            ))),
-        },
-    }?;
-
-    let target = match Address::from_str(&target) {
-        Ok(v) => Ok(TransferTarget::Address(v)),
-        Err(e1) => match PaymentAddress::from_str(&target) {
-            Ok(v) => Ok(TransferTarget::PaymentAddress(v)),
-            Err(e2) => Err(JsError::new(&format!(
-                "Can't compute the transfer target. {}, {}",
-                e1, e2
-            ))),
-        },
-    }?;
-
-    let token = Address::from_str(&token)?;
-    let denom_amount = DenominatedAmount::from_str(&amount).expect("Amount to be valid.");
-    let amount = InputAmount::Unvalidated(denom_amount);
-    let tx = tx_msg_into_args(tx_msg)?;
-
-    let args = args::TxTransfer {
-        tx,
-        source,
-        target,
-        token,
-        amount,
-        tx_code_path: PathBuf::from("tx_transfer.wasm"),
-    };
-
-    Ok(args)
-}
-
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitIbcTransferMsg {
-    source: String,
-    receiver: String,
-    token: String,
-    amount: String,
-    port_id: String,
-    channel_id: String,
-    timeout_height: Option<u64>,
-    timeout_sec_offset: Option<u64>,
-}
-
-/// Maps serialized tx_msg into IbcTransferTx args.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if the tx_msg can't be deserialized or
-/// Rust structs can't be created.
-pub fn ibc_transfer_tx_args(
-    ibc_transfer_msg: &[u8],
-    tx_msg: &[u8],
-) -> Result<args::TxIbcTransfer, JsError> {
-    let ibc_transfer_msg = SubmitIbcTransferMsg::try_from_slice(ibc_transfer_msg)?;
-    let SubmitIbcTransferMsg {
-        source,
-        receiver,
-        token,
-        amount,
-        port_id,
-        channel_id,
-        timeout_height,
-        timeout_sec_offset,
-    } = ibc_transfer_msg;
-
-    let source_address = Address::from_str(&source)?;
-    let source = TransferSource::Address(source_address);
-    let token = Address::from_str(&token)?;
-    let denom_amount = DenominatedAmount::from_str(&amount).expect("Amount to be valid.");
-    let amount = InputAmount::Unvalidated(denom_amount);
-    let port_id = PortId::from_str(&port_id).expect("Port id to be valid");
-    let channel_id = ChannelId::from_str(&channel_id).expect("Channel id to be valid");
-    let tx = tx_msg_into_args(tx_msg)?;
-
-    let args = args::TxIbcTransfer {
-        tx,
-        memo: None,
-        source,
-        receiver,
-        token,
-        amount,
-        port_id,
-        channel_id,
-        timeout_height,
-        timeout_sec_offset,
-        tx_code_path: PathBuf::from("tx_ibc.wasm"),
-    };
-
-    Ok(args)
-}
-
-#[derive(BorshSerialize, BorshDeserialize)]
-pub struct SubmitEthBridgeTransferMsg {
-    nut: bool,
-    asset: String,
-    recipient: String,
-    sender: String,
-    amount: String,
-    fee_amount: String,
-    fee_payer: Option<String>,
-    fee_token: String,
-}
-
-pub fn eth_bridge_transfer_tx_args(
-    eth_bridge_transfer_msg: &[u8],
-    tx_msg: &[u8],
-) -> Result<args::EthereumBridgePool, JsError> {
-    let eth_bridge_transfer_msg =
-        SubmitEthBridgeTransferMsg::try_from_slice(eth_bridge_transfer_msg)?;
-    let SubmitEthBridgeTransferMsg {
-        nut,
-        asset,
-        recipient,
-        sender,
-        amount,
-        fee_amount,
-        fee_payer,
-        fee_token,
-    } = eth_bridge_transfer_msg;
-
-    let tx = tx_msg_into_args(tx_msg)?;
-    let asset = EthAddress::from_str(&asset).map_err(|e| JsError::new(&format!("{}", e)))?;
-    let recipient =
-        EthAddress::from_str(&recipient).map_err(|e| JsError::new(&format!("{}", e)))?;
-    let sender = Address::from_str(&sender)?;
-    let denom_amount = DenominatedAmount::from_str(&amount).expect("Amount to be valid.");
-    let amount = InputAmount::Unvalidated(denom_amount);
-    let denom_amount = DenominatedAmount::from_str(&fee_amount).expect("Amount to be valid.");
-    let fee_amount = InputAmount::Unvalidated(denom_amount);
-    let fee_payer = fee_payer.map(|v| Address::from_str(&v)).transpose()?;
-    let fee_token = Address::from_str(&fee_token)?;
-    let code_path = PathBuf::from("tx_bridge_pool.wasm");
-
-    let args = args::EthereumBridgePool {
-        nut,
-        tx,
-        asset,
-        recipient,
-        sender,
-        amount,
-        fee_amount,
-        fee_payer,
-        fee_token,
-        code_path,
-    };
-
-    Ok(args)
-}
-
-pub fn tx_args_from_slice(tx_msg_bytes: &[u8]) -> Result<args::Tx, JsError> {
-    let args = tx_msg_into_args(tx_msg_bytes)?;
-
-    Ok(args)
-}
-
-/// Maps serialized tx_msg into Tx args.
-/// This is common for all tx types.
-///
-/// # Arguments
-///
-/// * `tx_msg` - Borsh serialized tx_msg.
-///
-/// # Errors
-///
-/// Returns JsError if token address is invalid.
-fn tx_msg_into_args(tx_msg: &[u8]) -> Result<args::Tx, JsError> {
-    let tx_msg = TxMsg::try_from_slice(tx_msg)?;
-    let TxMsg {
-        token,
-        fee_amount,
-        gas_limit,
-        chain_id,
-        public_key,
-        disposable_signing_key,
-        fee_unshield,
-    } = tx_msg;
-
-    let token = Address::from_str(&token)?;
-
-    let fee_amount = DenominatedAmount::from_str(&fee_amount)
-        .expect(format!("Fee amount has to be valid. Received {}", fee_amount).as_str());
-    let fee_input_amount = InputAmount::Unvalidated(fee_amount);
-
-    let public_key = match public_key {
-        Some(v) => {
-            let pk = PublicKey::from_str(&v)?;
-            Some(pk)
+        let mut public_keys: Vec<PublicKey> = vec![];
+        for pk in self.public_keys.clone() {
+            let pk = PublicKey::from_str(&pk)?;
+            public_keys.push(pk);
         }
-        _ => None,
-    };
 
-    let disposable_signing_key = disposable_signing_key.unwrap_or(false);
-    let siginig_keys: Vec<PublicKey> = match public_key {
-        Some(v) => vec![v.clone()],
-        _ => vec![],
-    };
+        let fee_payer = PublicKey::from_str(&self.fee_payer)?;
+        let threshold = self.threshold;
+        let account_public_keys_map = match &self.account_public_keys_map {
+            Some(pk_map) => Some(borsh::from_slice(&pk_map)?),
+            None => None,
+        };
 
-    let fee_unshield = match fee_unshield {
-        Some(v) => Some(TransferSource::ExtendedSpendingKey(
-            ExtendedSpendingKey::from_str(&v)?,
-        )),
-        _ => None,
-    };
+        Ok(SigningTxData {
+            owner,
+            public_keys,
+            fee_payer,
+            threshold,
+            account_public_keys_map,
+        })
+    }
+}
 
-    // Ledger address is not used in the SDK.
-    // We can leave it as whatever as long as it's valid url.
-    let ledger_address = TendermintAddress::from_str("notinuse:13337").unwrap();
+/// Serializable Tx for exported build functions
+#[derive(BorshSerialize, BorshDeserialize, Clone, Debug)]
+#[borsh(crate = "namada_sdk::borsh")]
+pub struct Tx {
+    args: WrapperTxMsg,
+    hash: String,
+    bytes: Vec<u8>,
+    signing_data: Vec<SigningData>,
+}
 
-    let args = args::Tx {
-        dry_run: false,
-        dry_run_wrapper: false,
-        disposable_signing_key,
-        dump_tx: false,
-        force: false,
-        broadcast_only: false,
-        ledger_address,
-        wallet_alias_force: false,
-        initialized_account_alias: None,
-        fee_amount: Some(fee_input_amount),
-        fee_token: token.clone(),
-        fee_unshield,
-        gas_limit: GasLimit::from_str(&gas_limit).expect("Gas limit to be valid"),
-        wrapper_fee_payer: None,
-        output_folder: None,
-        expiration: None,
-        chain_id: Some(ChainId(String::from(chain_id))),
-        signatures: vec![],
-        signing_keys: siginig_keys,
-        tx_reveal_code_path: PathBuf::from("tx_reveal_pk.wasm"),
-        use_device: false,
-        password: None,
-        memo: None,
-    };
+impl Tx {
+    pub fn new(
+        tx: tx::Tx,
+        args: &[u8],
+        signing_tx_data: Vec<SigningTxData>,
+    ) -> Result<Tx, JsError> {
+        let args: WrapperTxMsg = borsh::from_slice(&args)?;
+        let mut signing_data: Vec<SigningData> = vec![];
+        for sd in signing_tx_data.into_iter() {
+            let sd = SigningData::from_signing_tx_data(sd)?;
+            signing_data.push(sd);
+        }
+        let hash = tx.wrapper_hash();
+        let bytes: Vec<u8> = borsh::to_vec(&tx)?;
 
-    Ok(args)
+        Ok(Tx {
+            args,
+            hash: hash.unwrap().to_string(),
+            bytes,
+            signing_data,
+        })
+    }
+
+    pub fn tx_bytes(&self) -> Vec<u8> {
+        self.bytes.clone()
+    }
+
+    pub fn signing_tx_data(&self) -> Result<Vec<SigningTxData>, JsError> {
+        let mut signing_tx_data: Vec<SigningTxData> = vec![];
+        for sd in self.signing_data.clone().iter() {
+            signing_tx_data.push(sd.to_signing_tx_data()?);
+        }
+
+        Ok(signing_tx_data)
+    }
+
+    pub fn args(&self) -> WrapperTxMsg {
+        self.args.clone()
+    }
+}
+
+// Given the bytes of a Namada Tx, return all inner Tx hashes
+#[wasm_bindgen]
+pub fn get_inner_tx_hashes(tx_bytes: &[u8]) -> Result<Vec<String>, JsError> {
+    let nam_tx: tx::Tx = borsh::from_slice(tx_bytes)?;
+    let hash = nam_tx.wrapper_hash();
+    let cmts = nam_tx.commitments();
+    let mut inner_tx_hashes: Vec<String> = vec![];
+
+    for cmt in cmts {
+        let inner_tx_hash = compute_inner_tx_hash(hash.as_ref(), Either::Right(&cmt));
+        inner_tx_hashes.push(inner_tx_hash.to_string());
+    }
+
+    Ok(inner_tx_hashes)
+}
+
+pub fn wasm_hash_to_tx_type(wasm_hash: &str, wasm_hashes: &Vec<WasmHash>) -> Option<TxType> {
+    let type_map: HashMap<String, TxType> = HashMap::from([
+        (TX_TRANSFER_WASM.to_string(), TxType::Transfer),
+        (TX_BOND_WASM.to_string(), TxType::Bond),
+        (TX_REDELEGATE_WASM.to_string(), TxType::Redelegate),
+        (TX_UNBOND_WASM.to_string(), TxType::Unbond),
+        (TX_WITHDRAW_WASM.to_string(), TxType::Withdraw),
+        (TX_CLAIM_REWARDS_WASM.to_string(), TxType::ClaimRewards),
+        (TX_REVEAL_PK.to_string(), TxType::RevealPK),
+        (TX_VOTE_PROPOSAL.to_string(), TxType::VoteProposal),
+    ]);
+
+    for wh in wasm_hashes {
+        if wh.hash() == wasm_hash {
+            let tx_type = type_map.get(&wh.path());
+
+            if tx_type.is_some() {
+                return Some(*tx_type.unwrap());
+            }
+        }
+    }
+
+    None
+}
+
+// Deserialize Tx commitments into Borsh-serialized struct
+#[wasm_bindgen]
+pub fn deserialize_tx(tx_bytes: Vec<u8>, wasm_hashes: JsValue) -> Result<Vec<u8>, JsError> {
+    let tx = TxDetails::from_bytes(tx_bytes, wasm_hashes)?;
+    Ok(borsh::to_vec(&tx)?)
+}
+
+#[derive(BorshSerialize, BorshDeserialize)]
+#[borsh(crate = "namada_sdk::borsh")]
+pub struct Commitment {
+    tx_type: TxType,
+    hash: String,
+    tx_code_id: String,
+    memo: Option<String>,
+    data: Vec<u8>,
+}
+
+#[derive(BorshSerialize, BorshDeserialize)]
+#[borsh(crate = "namada_sdk::borsh")]
+pub struct TxDetails {
+    wrapper_tx: WrapperTxMsg,
+    commitments: Vec<Commitment>,
+}
+
+impl TxDetails {
+    pub fn from_bytes(tx_bytes: Vec<u8>, wasm_hashes: JsValue) -> Result<TxDetails, JsError> {
+        let tx: tx::Tx = borsh::from_slice(&tx_bytes)?;
+        let chain_id = tx.header().chain_id.to_string();
+
+        let tx_details = match tx.header().tx_type {
+            tx::data::TxType::Wrapper(wrapper) => {
+                let fee_amount = wrapper.fee.amount_per_gas_unit.to_string();
+                let gas_limit = Uint::from(wrapper.gas_limit).to_string();
+                let token = wrapper.fee.token.to_string();
+
+                let wrapper_tx =
+                    WrapperTxMsg::new(token, fee_amount, gas_limit, chain_id, None, None);
+                let mut commitments: Vec<Commitment> = vec![];
+                let wasm_hashes: Vec<WasmHash> = wasm_hashes.into_serde().unwrap();
+
+                for cmt in tx.commitments() {
+                    let memo = tx
+                        .memo(&cmt)
+                        .map(|memo_bytes| String::from_utf8_lossy(&memo_bytes).to_string());
+                    let hash = cmt.get_hash().to_string();
+                    let tx_code_id = tx
+                        .get_section(cmt.code_sechash())
+                        .and_then(|s| s.code_sec())
+                        .map(|s| s.code.hash().0)
+                        .map(|bytes| {
+                            String::from_utf8(subtle_encoding::hex::encode(bytes)).unwrap()
+                        });
+
+                    if tx_code_id.is_some() {
+                        let tx_code_id = tx_code_id.unwrap();
+                        let tx_type = wasm_hash_to_tx_type(&tx_code_id, &wasm_hashes);
+
+                        if tx_type.is_some() {
+                            let tx_type = tx_type.unwrap();
+                            let tx_data = tx.data(&cmt).unwrap_or_default();
+                            let tx_kind = transaction::TransactionKind::from(tx_type, &tx_data);
+                            let data = tx_kind.to_bytes()?;
+
+                            commitments.push(Commitment {
+                                tx_type,
+                                hash,
+                                tx_code_id,
+                                memo,
+                                data,
+                            });
+                        }
+                    }
+                }
+
+                Ok(TxDetails {
+                    wrapper_tx,
+                    commitments,
+                })
+            }
+            _ => Err(JsError::new("Invalid transaction type!")),
+        };
+
+        Ok(tx_details?)
+    }
+}
+
+#[wasm_bindgen]
+#[derive(BorshSerialize, BorshDeserialize)]
+#[borsh(crate = "namada_sdk::borsh")]
+pub struct BatchTxResult {
+    hash: String,
+    is_applied: bool,
+}
+
+impl BatchTxResult {
+    pub fn new(hash: String, is_applied: bool) -> BatchTxResult {
+        BatchTxResult { hash, is_applied }
+    }
+}
+
+/// Serializable response for process_tx calls
+#[wasm_bindgen]
+#[derive(BorshSerialize, BorshDeserialize)]
+#[borsh(crate = "namada_sdk::borsh")]
+pub struct TxResponse {
+    code: String,
+    commitments: Vec<BatchTxResult>,
+    gas_used: String,
+    hash: String,
+    height: String,
+    info: String,
+    log: String,
+}
+
+impl TxResponse {
+    pub fn new(
+        code: String,
+        commitments: Vec<BatchTxResult>,
+        gas_used: String,
+        hash: String,
+        height: String,
+        info: String,
+        log: String,
+    ) -> TxResponse {
+        TxResponse {
+            code,
+            commitments,
+            gas_used,
+            hash,
+            height,
+            info,
+            log,
+        }
+    }
 }

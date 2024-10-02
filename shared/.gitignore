@@ -1,4 +1,3 @@
 src/shared
-node_modules/
-lib/target/
+lib/**/*.js
 dist
