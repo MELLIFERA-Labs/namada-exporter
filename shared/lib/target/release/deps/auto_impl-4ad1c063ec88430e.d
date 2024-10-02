@@ -1,9 +1,0 @@
-/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/libauto_impl-4ad1c063ec88430e.dylib: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/analyze.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/attr.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/gen.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/proxy.rs
-
-/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/release/deps/auto_impl-4ad1c063ec88430e.d: /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/analyze.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/attr.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/gen.rs /Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/proxy.rs
-
-/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/lib.rs:
-/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/analyze.rs:
-/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/attr.rs:
-/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/gen.rs:
-/Users/yevheniikhlivetskyi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/auto_impl-1.2.0/src/proxy.rs:

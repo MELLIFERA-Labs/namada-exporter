@@ -1,9 +1,0 @@
-/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libibc_core_router-272badbdef22754e.rmeta: /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/module.rs /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/router.rs
-
-/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/libibc_core_router-272badbdef22754e.rlib: /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/module.rs /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/router.rs
-
-/Users/yevheniikhlivetskyi/Projects/namada-interface/packages/shared/lib/target/wasm32-unknown-unknown/release/deps/ibc_core_router-272badbdef22754e.d: /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/lib.rs /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/module.rs /Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/router.rs
-
-/Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/lib.rs:
-/Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/module.rs:
-/Users/yevheniikhlivetskyi/.cargo/git/checkouts/cosmos-ibc-rs-0d008649c8c23f81/0c3b3c0/ibc-core/ics26-routing/src/router.rs:

@@ -1,2 +1,0 @@
-cargo:rustc-cfg=is_apple_silicon
-cargo::rustc-check-cfg=cfg(is_apple_silicon)
