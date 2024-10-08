@@ -1,8 +1,8 @@
 //! PaymentAddress - Provide wasm_bindgen bindings for shielded addresses
 //! See @namada/crypto for zip32 HD wallet functionality.
-use borsh::BorshDeserialize;
-use masp_primitives::{sapling, zip32};
-use namada::types::masp;
+use namada_sdk::borsh::BorshDeserialize;
+use namada_sdk::masp;
+use namada_sdk::masp_primitives::{sapling, zip32};
 use thiserror::Error;
 use wasm_bindgen::prelude::*;
 
@@ -78,16 +78,6 @@ impl PaymentAddress {
         Ok(PaymentAddress(payment_address))
     }
 
-    /// Returns a pinned or non-pinned PaymentAddress
-    pub fn pinned(&self, pin: bool) -> PaymentAddress {
-        PaymentAddress(self.0.pinned(pin))
-    }
-
-    /// Determine whether this PaymentAddress is pinned
-    pub fn is_pinned(&self) -> bool {
-        self.0.is_pinned()
-    }
-
     /// Retrieve PaymentAddress hash
     pub fn hash(&self) -> String {
         self.0.hash()
@@ -103,7 +93,9 @@ impl PaymentAddress {
 mod tests {
     use super::*;
 
-    #[test]
+    use wasm_bindgen_test::*;
+
+    #[wasm_bindgen_test]
     fn can_deserialize_an_extended_spending_key() {
         // BorshSerialize'd slice, generated from @namada/crypto - zip32
         let encoded_xsk: &[u8] = &[
@@ -133,7 +125,7 @@ mod tests {
         assert_eq!(key, expected_key);
     }
 
-    #[test]
+    #[wasm_bindgen_test]
     fn can_deserialize_an_extended_viewing_key() {
         // BorshSerialize'd slice, generated from @namada/crypto - zip32
         let encoded_xfvk: &[u8] = &[
@@ -162,7 +154,7 @@ mod tests {
         assert_eq!(key, expected_key);
     }
 
-    #[test]
+    #[wasm_bindgen_test]
     fn can_deserialize_a_payment_address() {
         // BorshSerialize'd slice, generated from @namada/crypto - zip32
         let encoded_payment_address: &[u8] = &[
@@ -177,29 +169,12 @@ mod tests {
         let hash = payment_address.hash();
 
         let expected_address =
-            "znam1qpjvwgnqt4p3yh6k3daatr0yjw5a4a6t20p5sjfvg8508ew387msz46hev5tfun8h067qfqh3s64t";
+            "znam1vnrjyczagvf9745t002cmeyn48d0wj6ncdyyjtzpare7t5flkuq4w47t9z60yeam7hszgyhdw2j";
 
-        let expected_hash = "DBF7C3440E0C0B81EBBB95AD26DA6D875C19BC45";
+        let expected_hash = "4E11B97D220F336CF36A14E8DDFE15ED34BC489D";
 
         assert!(address.starts_with("znam"));
         assert_eq!(address, expected_address);
         assert_eq!(hash, expected_hash);
-    }
-
-    #[test]
-    fn can_pin_a_payment_address() {
-        let encoded_payment_address: &[u8] = &[
-            100, 199, 34, 96, 93, 67, 18, 95, 86, 139, 123, 213, 141, 228, 147, 169, 218, 247, 75,
-            83, 195, 72, 73, 44, 65, 232, 243, 229, 209, 63, 183, 1, 87, 87, 203, 40, 180, 242,
-            103, 187, 245, 224, 36,
-        ];
-        let payment_address = PaymentAddress::new(encoded_payment_address)
-            .expect("Instantiating PaymentAddress struct should not fail!");
-
-        let is_pinned = payment_address.is_pinned();
-        assert!(!is_pinned);
-
-        let payment_address = payment_address.pinned(true);
-        assert!(payment_address.is_pinned());
     }
 }

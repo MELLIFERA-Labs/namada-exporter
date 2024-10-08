@@ -21,6 +21,7 @@ import {
   validatorLatestBlockMetric,
 } from './metrics.ts'
 import Prometheus from 'prom-client'
+
 program
   .name(packageJson.name)
   .version(packageJson.version)
@@ -89,6 +90,7 @@ async function collectMetrics(config: {
   }
 
   const q = new Query(config['validator_http_rpc'])
+
   /** request data */
   const [epoch, validator, validators, posParams] = await Promise.all([
     q.query_epoch(),
