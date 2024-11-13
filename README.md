@@ -11,7 +11,7 @@ Check out this [repo](https://github.com/MELLIFERA-Labs/namada-exporter-validato
 wget <release_url>
 ```
 ### Or build from source:
-1. Install bun(JavaScript runtime) https://bun.sh Rust Cargo and Node.js
+1. Install bun(JavaScript runtime) https://bun.sh Rust Cargo and Node.js, protobuf-compiler, build-essential 
 2. Clone this repo
 3. Install dependencies for shared in /shared folder:
 ```bash
