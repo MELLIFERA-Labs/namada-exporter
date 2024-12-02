@@ -1,3 +1,5 @@
-port = 3000
-validator_tm_address = "tnam..."
-validator_http_rpc = "https://younoderpc"
+host = "127.0.0.1:3000"
+validator_tm_address = "tnam1..."
+http_rpc = "https://rpc.some_rpc.run/"
+# or 
+# http_rpc = "http://localohost:26657"

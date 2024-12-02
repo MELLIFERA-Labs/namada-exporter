@@ -1,0 +1,24 @@
+[package]
+name = "namada-exporter"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ruslan Glaznyov <ruslan.glaznyov@gmail.com>"]
+description = "Namada Exporter"
+
+[dependencies]
+tendermint-rpc = { version = "0.38.1", features = ["http-client"]}
+tokio = { version = "1", features = ["full"] }
+namada_sdk = { git = "https://github.com/anoma/namada",version = "0.46.0", default-features = false  }
+axum = { version = "0.7.9", features = ["macros"] }
+prometheus-client = "0.22.3"
+itertools = "0.13.0"
+clap = { version = "4.5.21", features = ["derive"] }
+toml = "0.8.19"        
+serde = { version = "1.0", features = ["derive"] }
+env_logger = "0.11.5"
+log = "0.4"
+[profile.release]
+opt-level = "z"    # Optimize for size
+lto = true         # Enable Link Time Optimization
+codegen-units = 1  # Reduce the number of codegen units for better optimizations
+panic = "abort"    # Use 'abort' for smaller panic handling
