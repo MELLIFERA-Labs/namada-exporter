@@ -14,7 +14,7 @@ wget <release_url>
 1. Clone repo 
 2. Install dependencies 
 
-```
+```bash
 # Install curl
 sudo apt-get install -y curl
 # Install rustup
