@@ -124,17 +124,17 @@ impl NamadaMetrics {
                 metric: Family::<ValidatorLabels, Gauge>::default(),
             },
             namada_missed_blocks: ValidatorMetricInt {
-                name: "namada_missed_blocks".to_string(),
+                name: "namada_validator_missed_blocks".to_string(),
                 help: "Validator missed blocks in liveness window; -1 value if not in active set".to_string(),
                 metric: Family::<ValidatorLabels, Gauge>::default(),
             },
             namada_total_bonds: ValidatorMetricInt {
-                name: "namada_total_bonds".to_string(),
+                name: "namada_validator_total_bonds".to_string(),
                 help: "Validator total bonds".to_string(),
                 metric: Family::<ValidatorLabels, Gauge>::default(),
             },
             validator_commission: ValidatorMetricFloat {
-                name: "validator_commission".to_string(),
+                name: "namada_validator_commission".to_string(),
                 help: "Validator commission".to_string(),
                 metric: Family::<ValidatorLabels, Gauge::<f64, AtomicU64>>::default(),
             },

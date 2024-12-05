@@ -97,7 +97,7 @@ impl Query {
         let liveness_key = proof_of_stake::storage_key::liveness_sum_missed_votes_key();
         let val_key = rpc::query_validator_consensus_keys(&self.client, &addr)
             .await?
-            .unwrap();
+            .expect("Could not get validator consensus key");
 
         let missed_key = liveness_key
             .push(&DbKeySeg::StringSeg("data".to_string()))
