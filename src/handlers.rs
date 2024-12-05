@@ -29,7 +29,12 @@ fn process_validator_metrics_data(
         .to_string()
         .parse::<f64>()
         .expect("Could not parse liveness_threshold");
-    let max_block_to_slash = (liveness_window_check as f64) * liveness_threshold;
+    // Example: 
+    // liveness_window_check = 10000 
+    // liveness_threshold = "0.1" 
+    // means that you must be live for at least 10% of the most recent 10,000 blocks, if you miss 9000 blocks in a row, then you are automatically jailed.
+    let max_block_to_slash = (liveness_window_check as f64) - ((liveness_window_check as f64) * liveness_threshold);
+    debug!("Max block to slash: {}", max_block_to_slash);
     let uptime_percentage = match validator_data.missed_blocks {
         Some(missed_blocks) => {
             let uptime = 1.0 - ((missed_blocks as f64) / max_block_to_slash);
