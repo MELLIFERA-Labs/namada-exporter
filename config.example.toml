@@ -3,3 +3,4 @@ validator_tm_address = "tnam1..."
 http_rpc = "https://rpc.some_rpc.run/"
 # or 
 # http_rpc = "http://localohost:26657"
+
