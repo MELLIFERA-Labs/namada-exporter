@@ -251,45 +251,45 @@ impl NamadaMetrics {
             .namada_validator_uptime_percentage
             .metric
             .get_or_create(&ValidatorLabels {
-            chain_id: self.chain_id.clone(),
-            validator_tm_address: self.tm_address.clone(),
-            validator_hash_address: validator_data.validator_address_hash.clone(),
+                chain_id: self.chain_id.clone(),
+                validator_tm_address: self.tm_address.clone(),
+                validator_hash_address: validator_data.validator_address_hash.clone(),
             })
             .set(validator_data.namada_validator_uptime_percentage);
         self.metrics
             .namada_validator_state
             .metric
             .get_or_create(&ValidatorLabels {
-            chain_id: self.chain_id.clone(),
-            validator_tm_address: self.tm_address.clone(),
-            validator_hash_address: validator_data.validator_address_hash.clone(),
+                chain_id: self.chain_id.clone(),
+                validator_tm_address: self.tm_address.clone(),
+                validator_hash_address: validator_data.validator_address_hash.clone(),
             })
             .set(validator_data.namada_validator_state);
         self.metrics
             .namada_validator_active_set_rank
             .metric
             .get_or_create(&ValidatorLabels {
-            chain_id: self.chain_id.clone(),
-            validator_tm_address: self.tm_address.clone(),
-            validator_hash_address: validator_data.validator_address_hash.clone(),
+                chain_id: self.chain_id.clone(),
+                validator_tm_address: self.tm_address.clone(),
+                validator_hash_address: validator_data.validator_address_hash.clone(),
             })
             .set(validator_data.namada_validator_active_set_rank);
         self.metrics
             .namada_missed_blocks
             .metric
             .get_or_create(&ValidatorLabels {
-            chain_id: self.chain_id.clone(),
-            validator_tm_address: self.tm_address.clone(),
-            validator_hash_address: validator_data.validator_address_hash.clone(),
+                chain_id: self.chain_id.clone(),
+                validator_tm_address: self.tm_address.clone(),
+                validator_hash_address: validator_data.validator_address_hash.clone(),
             })
             .set(validator_data.namada_missed_blocks);
         self.metrics
             .namada_total_bonds
             .metric
             .get_or_create(&ValidatorLabels {
-            chain_id: self.chain_id.clone(),
-            validator_tm_address: self.tm_address.clone(),
-            validator_hash_address: validator_data.validator_address_hash.clone(),
+                chain_id: self.chain_id.clone(),
+                validator_tm_address: self.tm_address.clone(),
+                validator_hash_address: validator_data.validator_address_hash.clone(),
             })
             .set(validator_data.namada_total_bonds);
         let rounded: f64 = format!("{:.2}", validator_data.validator_commission as f64)
@@ -299,9 +299,9 @@ impl NamadaMetrics {
             .validator_commission
             .metric
             .get_or_create(&ValidatorLabels {
-            chain_id: self.chain_id.clone(),
-            validator_tm_address: self.tm_address.clone(),
-            validator_hash_address: validator_data.validator_address_hash.clone(),
+                chain_id: self.chain_id.clone(),
+                validator_tm_address: self.tm_address.clone(),
+                validator_hash_address: validator_data.validator_address_hash.clone(),
             })
             .set(rounded);
     }

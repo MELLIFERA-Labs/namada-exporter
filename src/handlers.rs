@@ -16,7 +16,7 @@ use tendermint_rpc::endpoint::status::Response as StatusResponse;
 
 use crate::server::ServerState;
 use itertools::Itertools;
-use log::{info, debug};
+use log::{debug, info};
 fn process_validator_metrics_data(
     pos_params: &PosParams,
     validator_data: &ValidatorData,
@@ -29,11 +29,12 @@ fn process_validator_metrics_data(
         .to_string()
         .parse::<f64>()
         .expect("Could not parse liveness_threshold");
-    // Example: 
-    // liveness_window_check = 10000 
-    // liveness_threshold = "0.1" 
+    // Example:
+    // liveness_window_check = 10000
+    // liveness_threshold = "0.1"
     // means that you must be live for at least 10% of the most recent 10,000 blocks, if you miss 9000 blocks in a row, then you are automatically jailed.
-    let max_block_to_slash = (liveness_window_check as f64) - ((liveness_window_check as f64) * liveness_threshold);
+    let max_block_to_slash =
+        (liveness_window_check as f64) - ((liveness_window_check as f64) * liveness_threshold);
     debug!("Max block to slash: {}", max_block_to_slash);
     let uptime_percentage = match validator_data.missed_blocks {
         Some(missed_blocks) => {
@@ -103,7 +104,6 @@ pub async fn metrics_handler(State(state): State<ServerState>) -> impl IntoRespo
     let status = q.status().expect("Could not query status");
     debug!("Queries status: {:?}", status);
 
-
     info!("Querying validator data");
     let validator = q.query_validators_data(&address).unwrap();
     debug!("Queries validator: {:?}", validator);
@@ -125,7 +125,6 @@ pub async fn metrics_handler(State(state): State<ServerState>) -> impl IntoRespo
         .position(|v| v.address == address) // Find the position of the element matching the condition
         .expect("Can't find validator")
         + 1;
-
 
     let validator_data = match validator {
         Some(data) => process_validator_metrics_data(&pos_params, &data, validator_rank as u32),

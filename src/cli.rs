@@ -17,7 +17,7 @@ pub enum Commands {
     /// Run the exporter with a configuration file
     Start {
         /// Path to the config.toml file
-        #[arg(short='c', long, value_name = "CONFIG_FILE")]
+        #[arg(short = 'c', long, value_name = "CONFIG_FILE")]
         config: PathBuf,
     },
 }
