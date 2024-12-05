@@ -72,7 +72,11 @@ namada_network_stake_threshold{chain_id="namada.5f5de2dd1b88cba30586420"} 100000
 # HELP namada_network_active_set_size Active set size.
 # TYPE namada_network_active_set_size gauge
 namada_network_active_set_size{chain_id="namada.5f5de2dd1b88cba30586420"} 176
-# HELP namada_validator_node_latest_block Latest block from rpc.
+# HELP namada_node_latest_block Latest block from rpc.
+# TYPE namada_node_latest_block gauge
+namada_node_latest_block{chain_id="namada.5f5de2dd1b88cba30586420",node_id="b7f19137e79ed78319f407c3e0fd6d86a98da5cf",moniker="technodrome-v1.0.0"} 22407
+# HELP namada_validator_node_latest_block Latest block from rpc. This metric is deprecated and will be removed in future versions please use namada_node_latest_block.
 # TYPE namada_validator_node_latest_block gauge
-namada_validator_node_latest_block{chain_id="namada.5f5de2dd1b88cba30586420",node_id="b7f19137e79ed78319f407c3e0fd6d86a98da5cf",moniker="technodrome-v1.0.0"} 22241
+namada_validator_node_latest_block{chain_id="namada.5f5de2dd1b88cba30586420"} 22407
+# EOF
 ```

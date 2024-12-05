@@ -97,6 +97,7 @@ pub struct Metrics {
     namada_network_stake_threshold: NetworkMetricInt,
     namada_network_active_set_size: NetworkMetricInt,
     namada_node_latest_block: NodeMetricInt,
+    namada_validator_missed_blocks: NetworkMetricInt,
 }
 pub struct NamadaMetrics {
     chain_id: String,
@@ -168,8 +169,13 @@ impl NamadaMetrics {
                 help: "Active set size".to_string(),
                 metric: Family::<NetworkLabels, Gauge>::default(),
             },
-            namada_node_latest_block: NodeMetricInt {
+            namada_validator_missed_blocks: NetworkMetricInt {
                 name: "namada_validator_node_latest_block".to_string(),
+                help: "Latest block from rpc. This metric is deprecated and will be removed in future versions please use namada_node_latest_block".to_string(),
+                metric: Family::<NetworkLabels, Gauge>::default(),
+            },
+            namada_node_latest_block: NodeMetricInt {
+                name: "namada_node_latest_block".to_string(),
                 help: "Latest block from rpc".to_string(),
                 metric: Family::<NodeLabels, Gauge>::default(),
             },
@@ -238,6 +244,11 @@ impl NamadaMetrics {
             metric.namada_node_latest_block.name.as_str(),
             metric.namada_node_latest_block.help.as_str(),
             metric.namada_node_latest_block.metric.clone(),
+        );
+        registry.register(
+            metric.namada_validator_missed_blocks.name.as_str(),
+            metric.namada_validator_missed_blocks.help.as_str(),
+            metric.namada_validator_missed_blocks.metric.clone(),
         );
         NamadaMetrics {
             chain_id,
@@ -357,6 +368,13 @@ impl NamadaMetrics {
                 chain_id: self.chain_id.clone(),
                 node_id: node_data.node_id.clone(),
                 moniker: node_data.moniker.clone(),
+            })
+            .set(node_data.namada_node_latest_block);
+        self.metrics
+            .namada_validator_missed_blocks
+            .metric
+            .get_or_create(&NetworkLabels {
+                chain_id: self.chain_id.clone(),
             })
             .set(node_data.namada_node_latest_block);
     }
