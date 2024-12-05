@@ -2,7 +2,6 @@
 > Namada exporter for Prometheus
 
 ## Grafana dashboard
-todo: need to update minor changes
 Check out this [repo](https://github.com/MELLIFERA-Labs/namada-exporter-validator-dashboard), or here is the link to [Grafana dashboard](https://grafana.com/grafana/dashboards/20550-namada-validators/)
 
 ## Install
@@ -13,7 +12,21 @@ wget <release_url>
 ```
 ### Or build from source:
 1. Clone repo 
-2. Install rust https://www.rust-lang.org/tools/install
+2. Install dependencies 
+
+```
+# Install curl
+sudo apt-get install -y curl
+# Install rustup
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# Install clang
+sudo apt-get install -y clang
+# Install openssl development packages
+sudo apt-get install -y libssl-dev
+# Install protoc
+sudo apt-get install -y protobuf-compiler
+```
+
 3. Build 
 ```bash 
 cargo build --release 
