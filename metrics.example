@@ -1,0 +1,43 @@
+# HELP namada_validator_uptime_percentage Validator uptime in percentage; -1 value if validator not in active set.
+# TYPE namada_validator_uptime_percentage gauge
+namada_validator_uptime_percentage{chain_id="housefire-alpaca.cc0d3e0c033be",validator_tm_address="tnam1q8unq87chw62cmn6j2v7xfwr52xre06rxq6x4yuq",validator_hash_address="A80053EA80C1B85049E3D21CA496F32AC762DA87"} 100
+# HELP namada_validator_state Validator state; 0 - unknown, 1 - active consensus set, 2 - active below capacity set, 3 - active below threshold set, 4 - jailed, 5 - inactive.
+# TYPE namada_validator_state gauge
+namada_validator_state{chain_id="housefire-alpaca.cc0d3e0c033be",validator_tm_address="tnam1q8unq87chw62cmn6j2v7xfwr52xre06rxq6x4yuq",validator_hash_address="A80053EA80C1B85049E3D21CA496F32AC762DA87"} 1
+# HELP namada_validator_active_set_rank Validator active set rank, -1 value if not in active set.
+# TYPE namada_validator_active_set_rank gauge
+namada_validator_active_set_rank{chain_id="housefire-alpaca.cc0d3e0c033be",validator_tm_address="tnam1q8unq87chw62cmn6j2v7xfwr52xre06rxq6x4yuq",validator_hash_address="A80053EA80C1B85049E3D21CA496F32AC762DA87"} 3
+# HELP namada_validator_missed_blocks Validator missed blocks in liveness window; -1 value if not in active set.
+# TYPE namada_validator_missed_blocks gauge
+namada_validator_missed_blocks{chain_id="housefire-alpaca.cc0d3e0c033be",validator_tm_address="tnam1q8unq87chw62cmn6j2v7xfwr52xre06rxq6x4yuq",validator_hash_address="A80053EA80C1B85049E3D21CA496F32AC762DA87"} 0
+# HELP namada_validator_total_bonds Validator total bonds.
+# TYPE namada_validator_total_bonds gauge
+namada_validator_total_bonds{chain_id="housefire-alpaca.cc0d3e0c033be",validator_tm_address="tnam1q8unq87chw62cmn6j2v7xfwr52xre06rxq6x4yuq",validator_hash_address="A80053EA80C1B85049E3D21CA496F32AC762DA87"} 100100000000
+# HELP namada_validator_commission Validator commission.
+# TYPE namada_validator_commission gauge
+namada_validator_commission{chain_id="housefire-alpaca.cc0d3e0c033be",validator_tm_address="tnam1q8unq87chw62cmn6j2v7xfwr52xre06rxq6x4yuq",validator_hash_address="A80053EA80C1B85049E3D21CA496F32AC762DA87"} 0.05
+# HELP namada_network_epoch Current network epoch.
+# TYPE namada_network_epoch gauge
+namada_network_epoch{chain_id="housefire-alpaca.cc0d3e0c033be"} 587
+# HELP namada_node_catch_up Validator catch up status; 0 - not catching up, 1 - catching up.
+# TYPE namada_node_catch_up gauge
+namada_node_catch_up{chain_id="housefire-alpaca.cc0d3e0c033be"} 0
+# HELP namada_network_lowest_active_set_stake Lowest active set stake.
+# TYPE namada_network_lowest_active_set_stake gauge
+namada_network_lowest_active_set_stake{chain_id="housefire-alpaca.cc0d3e0c033be"} 1500000000
+# HELP namada_network_max_set_size Max set size.
+# TYPE namada_network_max_set_size gauge
+namada_network_max_set_size{chain_id="housefire-alpaca.cc0d3e0c033be"} 255
+# HELP namada_network_stake_threshold Stake threshold.
+# TYPE namada_network_stake_threshold gauge
+namada_network_stake_threshold{chain_id="housefire-alpaca.cc0d3e0c033be"} 1000000000
+# HELP namada_network_active_set_size Active set size.
+# TYPE namada_network_active_set_size gauge
+namada_network_active_set_size{chain_id="housefire-alpaca.cc0d3e0c033be"} 17
+# HELP namada_node_latest_block Latest block from rpc.
+# TYPE namada_node_latest_block gauge
+namada_node_latest_block{chain_id="housefire-alpaca.cc0d3e0c033be",node_id="7e2069e6bf93a23b611ec9551d1a9427603f5792",moniker="technodrome-v1.0.0"} 265429
+# HELP namada_validator_node_latest_block Latest block from rpc. This metric is deprecated and will be removed in future versions please use namada_node_latest_block.
+# TYPE namada_validator_node_latest_block gauge
+namada_validator_node_latest_block{chain_id="housefire-alpaca.cc0d3e0c033be"} 265429
+# EOF

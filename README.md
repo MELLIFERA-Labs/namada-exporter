@@ -1,95 +1,95 @@
-# namada-exporter
-> Namada exporter for Prometheus
+# 🟡 namada-exporter
 
-## Grafana dashboard
-Check out this [repo](https://github.com/MELLIFERA-Labs/namada-exporter-validator-dashboard), or here is the link to [Grafana dashboard](https://grafana.com/grafana/dashboards/20550-namada-validators/)
+## About 
 
-## Install
+The **namada-exporter** is a tool designed to integrate with Namada network, enabling efficient monitoring for Prometheus.
 
-### Download exporter:
-```bash 
-wget <release_url>
-```
-### Or build from source:
-1. Clone repo 
-2. Install dependencies 
+Pre-built Grafana dashboard for the namada-exporter are available and detailed in a section below.
+
+For an example of the metrics exposed by the namada-exporter, refer to the [metrics.example](metrics.example) file.
+
+## Prerequisites
+
+### Dependencies
+Run the following command to install the necessary packages.
 
 ```bash
-# Install curl
-sudo apt-get install -y curl
-# Install rustup
+apt-get install -y git curl clang libssl-dev protobuf-compiler pkg-config
+```
+
+### Install Rust
+The namada-exporter is built using Rust. Follow these steps to install Rust and Cargo.
+
+Install rustup.
+```sh
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-# Install clang
-sudo apt-get install -y clang
-# Install openssl development packages
-sudo apt-get install -y libssl-dev
-# Install protoc
-sudo apt-get install -y protobuf-compiler
+```
+Restart your current shell to reload the PATH environment variable, or source the environment file.
+```sh
+. "$HOME/.cargo/env" 
 ```
 
-3. Build 
-```bash 
-cargo build --release 
+Verify the installation.
+```sh
+cargo --version
+rustc --version
 ```
-4. use binary in `target/release/namada-exporter`
 
-## Usage
-### Config example
+# Getting Started
 
-```toml
-host = "127.0.0.1:4000"
-validator_tm_address = "tnam1..."
-http_rpc = "https://rpc.some_rpc.run/"
+Clone the repository to your local machine.
+```sh 
+git clone https://github.com/MELLIFERA-Labs/namada-exporter.git
+cd namada-exporter
 ```
-Look at [config.example.toml](config.example.toml) for more details
-### Run
 
-```bash
+Build the project using Cargo. The binaries will be compiled and available at `target/release/namada-exporter`.
+```sh 
+cargo build --release
+```
+
+Create a configuration file by copying the example file, then update `config.toml` with your specific settings.
+```sh 
+cp config.example.toml config.toml
+```
+
+Start the namada-exporter using the configuration file.
+```sh
 ./namada-exporter start --config config.toml
 ```
-### Metrics expose example
+
+## Usage
+
+You can verify that the namada-exporter is running correctly by using the following command or by accessing the URL in your browser. If everything is set up correctly, it will return `OK`.
+
+```sh
+curl http://127.0.0.1:3001/
 ```
-# HELP namada_validator_uptime_percentage Validator uptime in percentage; -1 value if validator not in active set.
-# TYPE namada_validator_uptime_percentage gauge
-namada_validator_uptime_percentage{chain_id="namada.5f5de2dd1b88cba30586420",validator_tm_address="tnam1q8d8ypu5j88qqvx89grct795uap82dtlqvjqjh3h",validator_hash_address="E31D476BFFF77ECE5E7933768D40C0D6CF298526"} 100
-# HELP namada_validator_state Validator state; 0 - unknown, 1 - active consensus set, 2 - active below capacity set, 3 - active below threshold set, 4 - jailed, 5 - inactive.
-# TYPE namada_validator_state gauge
-namada_validator_state{chain_id="namada.5f5de2dd1b88cba30586420",validator_tm_address="tnam1q8d8ypu5j88qqvx89grct795uap82dtlqvjqjh3h",validator_hash_address="E31D476BFFF77ECE5E7933768D40C0D6CF298526"} 1
-# HELP namada_validator_active_set_rank Validator active set rank, -1 value if not in active set.
-# TYPE namada_validator_active_set_rank gauge
-namada_validator_active_set_rank{chain_id="namada.5f5de2dd1b88cba30586420",validator_tm_address="tnam1q8d8ypu5j88qqvx89grct795uap82dtlqvjqjh3h",validator_hash_address="E31D476BFFF77ECE5E7933768D40C0D6CF298526"} 40
-# HELP namada_validator_missed_blocks Validator missed blocks in liveness window; -1 value if not in active set.
-# TYPE namada_validator_missed_blocks gauge
-namada_validator_missed_blocks{chain_id="namada.5f5de2dd1b88cba30586420",validator_tm_address="tnam1q8d8ypu5j88qqvx89grct795uap82dtlqvjqjh3h",validator_hash_address="E31D476BFFF77ECE5E7933768D40C0D6CF298526"} 6
-# HELP namada_validator_total_bonds Validator total bonds.
-# TYPE namada_validator_total_bonds gauge
-namada_validator_total_bonds{chain_id="namada.5f5de2dd1b88cba30586420",validator_tm_address="tnam1q8d8ypu5j88qqvx89grct795uap82dtlqvjqjh3h",validator_hash_address="E31D476BFFF77ECE5E7933768D40C0D6CF298526"} 474864850000
-# HELP namada_validator_commission Validator commission.
-# TYPE namada_validator_commission gauge
-namada_validator_commission{chain_id="namada.5f5de2dd1b88cba30586420",validator_tm_address="tnam1q8d8ypu5j88qqvx89grct795uap82dtlqvjqjh3h",validator_hash_address="E31D476BFFF77ECE5E7933768D40C0D6CF298526"} 0.05
-# HELP namada_network_epoch Current network epoch.
-# TYPE namada_network_epoch gauge
-namada_network_epoch{chain_id="namada.5f5de2dd1b88cba30586420"} 7
-# HELP namada_node_catch_up Validator catch up status; 0 - not catching up, 1 - catching up.
-# TYPE namada_node_catch_up gauge
-namada_node_catch_up{chain_id="namada.5f5de2dd1b88cba30586420"} 0
-# HELP namada_network_lowest_active_set_stake Lowest active set stake.
-# TYPE namada_network_lowest_active_set_stake gauge
-namada_network_lowest_active_set_stake{chain_id="namada.5f5de2dd1b88cba30586420"} 1000000000
-# HELP namada_network_max_set_size Max set size.
-# TYPE namada_network_max_set_size gauge
-namada_network_max_set_size{chain_id="namada.5f5de2dd1b88cba30586420"} 255
-# HELP namada_network_stake_threshold Stake threshold.
-# TYPE namada_network_stake_threshold gauge
-namada_network_stake_threshold{chain_id="namada.5f5de2dd1b88cba30586420"} 1000000000
-# HELP namada_network_active_set_size Active set size.
-# TYPE namada_network_active_set_size gauge
-namada_network_active_set_size{chain_id="namada.5f5de2dd1b88cba30586420"} 176
-# HELP namada_node_latest_block Latest block from rpc.
-# TYPE namada_node_latest_block gauge
-namada_node_latest_block{chain_id="namada.5f5de2dd1b88cba30586420",node_id="b7f19137e79ed78319f407c3e0fd6d86a98da5cf",moniker="technodrome-v1.0.0"} 22407
-# HELP namada_validator_node_latest_block Latest block from rpc. This metric is deprecated and will be removed in future versions please use namada_node_latest_block.
-# TYPE namada_validator_node_latest_block gauge
-namada_validator_node_latest_block{chain_id="namada.5f5de2dd1b88cba30586420"} 22407
-# EOF
+
+Once the service is running, you can query the metrics by using the following command.
+
+```sh
+curl http://127.0.0.1:3001/metrics
 ```
+
+This will return all the metrics, formatted similarly to the [metrics.example](metrics.example) file.
+
+If you access the `/metrics` endpoint via a browser, it will download a file named `metrics` (without an extension). This behavior is in accordance with the Grafana specifications outlined in the [OpenMetrics standard](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md#overall-structure).
+
+# Dashboard
+
+Here is an example of a Grafana dashboard showcasing the essential metrics and data for effectively managing a validator node. This dashboard serves as a great starting point and can be customized to fit your specific requirements.
+
+<div style="text-align: center;"><img src="Dashboard-Example.png" alt="Dashboard Example" width="400"/></div>
+
+## Import Dashboard
+
+To import the dashboard into your Grafana instance, follow these steps:
+
+1. Copy the contents of the [namada-validator-dashboard.json](./namada-validator-dashboard.json) file from this repository.
+2. Navigate to your Grafana dashboard and click the `+` button on the left sidebar.
+3. Select `Import`.
+4. Either upload the `namada-validator-dashboard.json` file or paste its contents into the text area provided.
+5. Click `Load` and follow the instructions to save the dashboard.
+
+Alternatively, access the dashboard directly on Grafana's website: [20550-namada-validators | Grafana Labs](https://grafana.com/grafana/dashboards/20550-namada-validators/).
