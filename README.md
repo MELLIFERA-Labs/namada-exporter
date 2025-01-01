@@ -39,7 +39,7 @@ rustc --version
 
 Clone the repository to your local machine.
 ```sh
-# Clone this repository, copy the URL from the Code button above and use.
+# Clone this repository, copy the URL from the Code button above.
 git clone <copied-url>
 cd <repository-name>
 ```
