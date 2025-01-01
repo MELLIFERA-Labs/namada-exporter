@@ -38,9 +38,10 @@ rustc --version
 # Getting Started
 
 Clone the repository to your local machine.
-```sh 
-git clone https://github.com/MELLIFERA-Labs/namada-exporter.git
-cd namada-exporter
+```sh
+# Clone this repository, copy the URL from the Code button above and use.
+git clone <copied-url>
+cd <repository-name>
 ```
 
 Build the project using Cargo. The binaries will be compiled and available at `target/release/namada-exporter`.
