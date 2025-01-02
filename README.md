@@ -35,7 +35,7 @@ cargo --version
 rustc --version
 ```
 
-# Getting Started
+# 🚀 Getting Started
 
 Clone the repository to your local machine.
 ```sh
