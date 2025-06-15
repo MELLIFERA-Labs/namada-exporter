@@ -53,6 +53,15 @@ Create a configuration file by copying the example file, then update `config.tom
 ```sh 
 cp config.example.toml config.toml
 ```
+## Optional Configuration
+
+To display metrics directly in your browser (instead of triggering a file download), add the following line to your `config.toml`:
+
+```toml
+metrics_content_type = "text/plain; charset=utf-8"
+```
+
+By default, the exporter uses the ```application/openmetrics-text; version=1.0.0; charset=utf-8``` content type, which may cause the browser to download the metrics as a file.
 
 Start the namada-exporter using the configuration file.
 ```sh
