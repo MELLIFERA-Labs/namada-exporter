@@ -26,6 +26,7 @@ pub struct ExporterConfig {
     pub host: String,
     pub validator_tm_address: String,
     pub http_rpc: String,
+    pub metrics_content_type: Option<String>,
 }
 
 pub fn parse_cli() -> ExporterConfig {
