@@ -14,6 +14,9 @@ use axum::{
 use namada_sdk::proof_of_stake::PosParams;
 use tendermint_rpc::endpoint::status::Response as StatusResponse;
 
+const DEFAULT_METRICS_CONTENT_TYPE: &str =
+    "application/openmetrics-text; version=1.0.0; charset=utf-8";
+
 use crate::server::ServerState;
 use itertools::Itertools;
 use log::{debug, info};
@@ -138,12 +141,15 @@ pub async fn metrics_handler(State(state): State<ServerState>) -> impl IntoRespo
     let node_metrics = process_node_metrics(&status);
     metrics.set_node_metrics(&node_metrics);
 
+    let content_type = state
+    .config
+    .metrics_content_type
+    .clone()
+    .unwrap_or(DEFAULT_METRICS_CONTENT_TYPE.to_string());
+    
     Response::builder()
         .status(StatusCode::OK)
-        .header(
-            CONTENT_TYPE,
-            "application/openmetrics-text; version=1.0.0; charset=utf-8",
-        )
+        .header(CONTENT_TYPE, content_type)
         .body(Body::from(metrics.render()))
         .unwrap()
 }
