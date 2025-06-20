@@ -61,8 +61,10 @@ To display metrics directly in your browser (instead of triggering a file downlo
 metrics_content_type = "text/plain; charset=utf-8"
 ```
 
-By default, the exporter ```uses the application/openmetrics-text; version=1.0.0; charset=utf-8``` content type, as defined in the [prometheus OpenMetrics specification](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md#overall-structure).
+By default, the exporter uses the ```application/openmetrics-text; version=1.0.0; charset=utf-8``` content type, as defined in the [prometheus OpenMetrics specification](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md#overall-structure).
 This may cause your browser to download the metrics output as a file instead of displaying it.
+
+## Run 
 
 Start the namada-exporter using the configuration file.
 ```sh
