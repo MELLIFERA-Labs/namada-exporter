@@ -1,8 +1,10 @@
+use crate::constants;
 use clap::{Parser, Subcommand};
+use humantime::parse_duration;
 use serde::Deserialize;
 use std::fs;
 use std::path::PathBuf;
-use toml;
+use std::time::Duration;
 
 /// Example CLI application
 #[derive(Parser, Debug)]
@@ -21,12 +23,32 @@ pub enum Commands {
         config: PathBuf,
     },
 }
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ExporterConfig {
     pub host: String,
     pub validator_tm_address: String,
     pub http_rpc: String,
     pub metrics_content_type: Option<String>,
+    pub healthcheck: Option<HealthCheckConfig>,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct HealthCheckConfig {
+    pub ping_url: String,
+    pub ping_rate: String,
+    pub timeout: String,
+}
+
+impl HealthCheckConfig {
+    pub fn ping_interval(&self) -> Duration {
+        parse_duration(&self.ping_rate)
+            .unwrap_or_else(|_| Duration::from_secs(constants::DEFAULT_PING_RATE_IN_SECONDS))
+    }
+
+    pub fn timeout_duration(&self) -> Duration {
+        parse_duration(&self.timeout)
+            .unwrap_or_else(|_| Duration::from_secs(constants::DEFAULT_TIMEOUT_IN_SECONDS))
+    }
 }
 
 pub fn parse_cli() -> ExporterConfig {
