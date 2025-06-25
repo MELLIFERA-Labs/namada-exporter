@@ -1,12 +1,12 @@
 use namada_query::Query;
 use server::start_server;
 mod cli;
+mod constants;
 mod handlers;
+mod healthcheck;
 mod metrics;
 mod namada_query;
 mod server;
-mod healthcheck;
-mod constants;
 use cli::parse_cli;
 use env_logger::{Builder, Env};
 use healthcheck::HealthChecker;

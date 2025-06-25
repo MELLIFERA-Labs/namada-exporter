@@ -1,7 +1,7 @@
 use crate::cli::HealthCheckConfig;
+use log::{error, info, warn};
 use reqwest::Client;
 use tokio::time::interval;
-use log::{info, error, warn};
 
 pub struct HealthChecker {
     client: Client,
@@ -14,16 +14,18 @@ impl HealthChecker {
             .timeout(config.timeout_duration())
             .build()
             .expect("Failed to create HTTP client for health checks");
-        
+
         Self { client, config }
     }
 
     pub async fn start_health_check_loop(&self) {
         let mut interval_timer = interval(self.config.ping_interval());
-        
-        info!("Starting health check loop, pinging {} every {}", 
-              self.config.ping_url, self.config.ping_rate);
-        
+
+        info!(
+            "Starting health check loop, pinging {} every {}",
+            self.config.ping_url, self.config.ping_rate
+        );
+
         loop {
             interval_timer.tick().await;
             self.ping().await;
@@ -36,7 +38,10 @@ impl HealthChecker {
                 if response.status().is_success() {
                     info!("Health check ping successful: {}", response.status());
                 } else {
-                    warn!("Health check ping returned non-success status: {}", response.status());
+                    warn!(
+                        "Health check ping returned non-success status: {}",
+                        response.status()
+                    );
                 }
             }
             Err(e) => {

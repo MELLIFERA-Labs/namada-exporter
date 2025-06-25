@@ -1,9 +1,9 @@
+use crate::constants::DEFAULT_METRICS_CONTENT_TYPE;
 use crate::metrics::NetworkMetricsData;
 use crate::metrics::NodeMetricsData;
 use crate::metrics::ValidatorMetricsData;
 use crate::namada_query::ValidatorData;
 use crate::{metrics::NamadaMetrics, namada_query::ValidatorStake};
-use crate::constants::DEFAULT_METRICS_CONTENT_TYPE;
 use axum::http::header::CONTENT_TYPE;
 use axum::{
     body::Body,
@@ -140,11 +140,11 @@ pub async fn metrics_handler(State(state): State<ServerState>) -> impl IntoRespo
     metrics.set_node_metrics(&node_metrics);
 
     let content_type = state
-    .config
-    .metrics_content_type
-    .clone()
-    .unwrap_or(DEFAULT_METRICS_CONTENT_TYPE.to_string());
-    
+        .config
+        .metrics_content_type
+        .clone()
+        .unwrap_or(DEFAULT_METRICS_CONTENT_TYPE.to_string());
+
     Response::builder()
         .status(StatusCode::OK)
         .header(CONTENT_TYPE, content_type)
