@@ -3,6 +3,7 @@ use crate::metrics::NodeMetricsData;
 use crate::metrics::ValidatorMetricsData;
 use crate::namada_query::ValidatorData;
 use crate::{metrics::NamadaMetrics, namada_query::ValidatorStake};
+use crate::constants::DEFAULT_METRICS_CONTENT_TYPE;
 use axum::http::header::CONTENT_TYPE;
 use axum::{
     body::Body,
@@ -13,9 +14,6 @@ use axum::{
 };
 use namada_sdk::proof_of_stake::PosParams;
 use tendermint_rpc::endpoint::status::Response as StatusResponse;
-
-const DEFAULT_METRICS_CONTENT_TYPE: &str =
-    "application/openmetrics-text; version=1.0.0; charset=utf-8";
 
 use crate::server::ServerState;
 use itertools::Itertools;
