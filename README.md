@@ -64,6 +64,28 @@ metrics_content_type = "text/plain; charset=utf-8"
 By default, the exporter uses the ```application/openmetrics-text; version=1.0.0; charset=utf-8``` content type, as defined in the [prometheus OpenMetrics specification](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md#overall-structure).
 This may cause your browser to download the metrics output as a file instead of displaying it.
 
+#### HEALTHCHECK
+
+You can set up a health check to automatically send a "heartbeat" signal to monitoring services like [Uptime Kuma](https://github.com/louislam/uptime-kuma) or [healthchecks.io](https://healthchecks.io/) and simular.
+
+To enable this, add a `healthcheck` section to your configuration file:
+
+```toml
+[healthcheck]
+# The URL provided by your monitoring service to receive pings
+ping_url = "https://hc-ping.com/your-unique-id"
+
+# How often to send a ping (e.g., every 10 seconds)
+ping_rate = "10s"
+
+# How long to wait for a response before timing out
+timeout = "5s"
+```
+
+**Notes:**
+- Replace `"https://hc-ping.com/your-unique-id"` with the actual URL from your monitoring service.
+- Adjust `ping_rate` and `timeout` as needed for your setup. default is 10 seconds.
+
 ## Run 
 
 Start the namada-exporter using the configuration file.

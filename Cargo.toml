@@ -6,6 +6,8 @@ authors = ["Ruslan Glaznyov <ruslan.glaznyov@gmail.com>"]
 description = "Namada Exporter"
 
 [dependencies]
+reqwest = "0.12.20"
+humantime = "2.2"
 tendermint-rpc = { version = "0.38.1", features = ["http-client"]}
 tokio = { version = "1", features = ["full"] }
 namada_sdk = { git = "https://github.com/anoma/namada",version = "0.46.0", default-features = false  }
