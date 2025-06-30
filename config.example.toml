@@ -1,3 +1,12 @@
 host = "0.0.0.0:3001"
-validator_tm_address = ""
+validator_tm_address = "tnam1qyxy7tfh4cdzrvl7ttjfwcepyr8w9afpqvnxhadn"
 http_rpc = "http://127.0.0.1:26657"
+# optional if you need to change the default metrics content type. 
+# metrics_content_type = "text/plain; charset=utf-8"
+
+# ——— HEALTHCHECK ————————————————————————————————
+# optional, if you want to enable health checks use it with uptime-kuma or healthchecks.io
+# [healthcheck]
+# ping_url = "https://hc-ping.com/your-unique-id"
+# ping_rate = "10s"
+# timeout = "5s"
