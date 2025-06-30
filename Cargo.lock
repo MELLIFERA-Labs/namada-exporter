@@ -3580,7 +3580,7 @@ checksum = "defc4c55412d89136f966bbb339008b474350e5e6e78d2714439c386b3137a03"
 
 [[package]]
 name = "namada-exporter"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "axum",
  "clap",
