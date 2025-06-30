@@ -1,0 +1,3 @@
+port = 3000
+validator_tm_address = "tnam..."
+validator_http_rpc = "http://younoderpc"
